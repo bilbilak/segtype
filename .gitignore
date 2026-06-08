@@ -1,0 +1,23 @@
+# DevTools
+/.idea/
+/.vscode/
+/.claude/
+
+# Sub-repositories
+/docs/wiki/
+
+# Environment Files
+/.direnv/
+
+# Dependencies
+/node_modules/
+
+# Builds
+/dist/
+
+# Misc.
+.DS_Store
+Thumbs.db
+desktop.ini
+*.sw?
+*~
