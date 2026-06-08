@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SegType — Web-based Multi-segment Displays</title>
+    <meta name="description" content="Interactive playground and glyph designer for multi-segment displays.">
+    <meta name="keywords" content="segment display, multi-segment, 7-segment, 9-segment, 14-segment, 16-segment, LED, LCD, neon, glyph designer">
+    <meta name="author" content="Sam Ariafar">
+    <meta name="application-name" content="SegType">
+    <meta name="theme-color" id="meta-theme-color" content="#0d0d0d">
+    <meta property="og:title" content="SegType — Web-based Multi-segment Displays">
+    <meta property="og:description" content="Interactive playground and glyph designer for multi-segment displays.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bilbilak.github.io/segtype">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="SegType — Web-based Multi-segment Displays">
+    <meta name="twitter:description" content="Interactive playground and glyph designer for multi-segment displays.">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="components.js"></script>
+    <script type="module" src="app.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+</head>
+<body class="bg-dark-950 p-6 font-sans text-gray-350 min-h-screen flex justify-center">
+<div class="max-w-[1300px] w-full" x-data="app()">
+
+    <!-- ── header ── -->
+    <div class="grid grid-cols-[1fr_auto_1fr] items-center mb-7 pb-3.5 border-b border-dark-700">
+        <h1 class="text-xl font-bold tracking-[0.5px]">
+            <a href="https://github.com/bilbilak/segtype" class="text-gray-500 no-underline hover:text-gray-400">
+                <em class="not-italic text-neon">SegType</em>
+            </a>
+        </h1>
+        <nav class="flex gap-1">
+            <a href="#" @click.prevent="switchTab('playground')"
+               class="px-4 py-1.5 rounded-md text-xs no-underline border transition-all duration-150"
+               :class="tab === 'playground' ? 'border-neon text-neon bg-neon-bg' : 'border-dark-600 text-gray-500 hover:border-gray-550 hover:text-gray-300 hover:bg-dark-400'">
+               Playground
+            </a>
+            <a href="#" @click.prevent="switchTab('designer')"
+               class="px-4 py-1.5 rounded-md text-xs no-underline border transition-all duration-150"
+               :class="tab === 'designer' ? 'border-neon text-neon bg-neon-bg' : 'border-dark-600 text-gray-500 hover:border-gray-550 hover:text-gray-300 hover:bg-dark-400'">
+               Designer
+            </a>
+        </nav>
+        <div class="flex items-center gap-2.5 justify-end">
+            <button x-show="tab === 'playground'" @click="$dispatch('reset-playground')"
+                    class="bg-none border border-dark-600 text-gray-500 px-4 py-1.5 rounded-md text-xs cursor-pointer transition-all duration-150 hover:border-gray-550 hover:text-gray-300 hover:bg-dark-400">
+                Reset all
+            </button>
+            <button @click="toggleTheme" :title="themeLabel"
+                    class="bg-none border border-dark-600 text-gray-500 px-2.5 py-1.5 rounded-md text-xs cursor-pointer transition-all duration-150 hover:border-gray-550 hover:text-gray-300 hover:bg-dark-400 leading-none">
+                <span class="text-gray-300 text-lg leading-none">&#9728;</span>
+            </button>
+            <a href="https://github.com/bilbilak/segtype" aria-label="GitHub" class="text-gray-550 transition-colors duration-150 hover:text-gray-300 leading-none">
+                <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- ─── PLAYGROUND TAB ─── -->
+    <div x-show="tab === 'playground'" x-cloak>
+        <div x-data="playground()" @reset-playground.window="resetAll()">
+            <div class="grid grid-cols-[280px_1fr] gap-7 max-[800px]:grid-cols-1 items-start">
+
+                <!-- sidebar -->
+                <div class="flex flex-col gap-4">
+
+                    <!-- Glyph card -->
+                    <div class="bg-dark-900 border border-dark-700 rounded-[10px] p-4">
+                        <div class="text-[10px] font-bold uppercase tracking-[1.2px] text-gray-600 mb-3">Glyph</div>
+                        <div class="flex items-center gap-2.5 mb-2.5 last:mb-0">
+                            <label class="text-xs text-gray-450 min-w-[48px] shrink-0">Mode</label>
+                            <select x-model="mode" @change="onModeChange"
+                                    class="bg-dark-800 border border-dark-600 text-gray-300 px-2 py-[5px] rounded-[5px] text-[13px] cursor-pointer min-w-0 flex-1 focus:border-gray-550 focus:outline-none">
+                                <option value="7seg">7-segment</option>
+                                <option value="9seg">9-segment</option>
+                                <option value="14seg">14-segment</option>
+                                <option value="16seg">16-segment</option>
+                            </select>
+                        </div>
+                        <hr class="border-none border-t border-dark-700 my-2.5">
+                        <div class="flex gap-2.5 items-start" x-html="refPanelHTML"></div>
+                    </div>
+
+                    <!-- Appearance card -->
+                    <div class="bg-dark-900 border border-dark-700 rounded-[10px] p-4">
+                        <div class="text-[10px] font-bold uppercase tracking-[1.2px] text-gray-600 mb-3">Appearance</div>
+                        <div class="flex items-center gap-2.5 mb-2.5 last:mb-0">
+                            <label class="text-xs text-gray-450 min-w-[48px] shrink-0">Theme</label>
+                            <select x-ref="themeSel" x-model="theme"
+                                    class="bg-dark-800 border border-dark-600 text-gray-300 px-2 py-[5px] rounded-[5px] text-[13px] cursor-pointer min-w-0 flex-1 focus:border-gray-550 focus:outline-none"></select>
+                        </div>
+                        <div class="flex items-center gap-2.5 mb-2.5 last:mb-0">
+                            <label class="flex items-center gap-1.5 min-w-[48px] shrink-0 cursor-pointer select-none text-xs text-gray-450">
+                                <input type="checkbox" x-model="glow" class="accent-neon cursor-pointer">
+                                Glow
+                            </label>
+                            <input type="range" x-model="glowBlur" min="0" max="6"
+                                   class="flex-1 min-w-0">
+                            <span class="text-[11px] text-gray-550 min-w-[34px] text-right tabular-nums" x-text="glowBlur + 'px'"></span>
+                        </div>
+                        <div class="flex items-center gap-2.5 mb-2.5 last:mb-0">
+                            <label class="flex items-center gap-1.5 min-w-[48px] shrink-0 cursor-pointer select-none text-xs text-gray-450">
+                                <input type="checkbox" x-model="skewEnabled" class="accent-neon cursor-pointer">
+                                Skew
+                            </label>
+                            <input type="range" x-model="skewAngle" min="-30" max="30" :disabled="!skewEnabled"
+                                   class="flex-1 min-w-0">
+                            <span class="text-[11px] text-gray-550 min-w-[34px] text-right tabular-nums" x-text="skewAngle + '\u00b0'"></span>
+                        </div>
+                        <div class="flex items-center gap-2.5 mb-2.5 last:mb-0">
+                            <label class="text-xs text-gray-450 min-w-[48px] shrink-0">Height</label>
+                            <input type="range" x-model="height" min="20" max="200"
+                                   class="flex-1 min-w-0">
+                            <span class="text-[11px] text-gray-550 min-w-[34px] text-right tabular-nums" x-text="height + 'px'"></span>
+                        </div>
+                        <div class="flex items-center gap-2.5 mb-2.5 last:mb-0">
+                            <label class="text-xs text-gray-450 min-w-[48px] shrink-0">Gap</label>
+                            <input type="range" x-model="gap" min="0" max="40"
+                                   class="flex-1 min-w-0">
+                            <span class="text-[11px] text-gray-550 min-w-[34px] text-right tabular-nums" x-text="(gap / 100).toFixed(2)"></span>
+                        </div>
+                    </div>
+
+                    <!-- Custom Colors card -->
+                    <div class="bg-dark-900 border border-dark-700 rounded-[10px] p-4" x-show="isCustomTheme">
+                        <div class="text-[10px] font-bold uppercase tracking-[1.2px] text-gray-600 mb-3">Custom Colors</div>
+                        <div class="flex items-center gap-2 mb-2 last:mb-0">
+                            <label class="text-xs text-gray-450 min-w-[60px] shrink-0">Segment On</label>
+                            <input type="color" :value="customColor" @input="customColor = $event.target.value"
+                                   class="bg-none border-none rounded p-0 w-[30px] h-6 cursor-pointer shrink-0">
+                            <input type="text" :value="customColor" @change="onColorHexChange($el, 'customColor')"
+                                   class="w-[76px] bg-dark-800 border border-dark-600 text-gray-300 px-1.5 py-1 rounded text-xs font-mono">
+                        </div>
+                        <div class="flex items-center gap-2 mb-2 last:mb-0">
+                            <label class="text-xs text-gray-450 min-w-[60px] shrink-0">Segment Off</label>
+                            <input type="color" :value="customOffColor" @input="customOffColor = $event.target.value"
+                                   class="bg-none border-none rounded p-0 w-[30px] h-6 cursor-pointer shrink-0">
+                            <input type="text" :value="customOffColor" @change="onColorHexChange($el, 'customOffColor')"
+                                   class="w-[76px] bg-dark-800 border border-dark-600 text-gray-300 px-1.5 py-1 rounded text-xs font-mono">
+                        </div>
+                        <div class="flex items-center gap-2 last:mb-0">
+                            <label class="text-xs text-gray-450 min-w-[60px] shrink-0">Background</label>
+                            <input type="color" :value="customBg" @input="customBg = $event.target.value"
+                                   class="bg-none border-none rounded p-0 w-[30px] h-6 cursor-pointer shrink-0">
+                            <input type="text" :value="customBg" @change="onColorHexChange($el, 'customBg')"
+                                   class="w-[76px] bg-dark-800 border border-dark-600 text-gray-300 px-1.5 py-1 rounded text-xs font-mono">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- main -->
+                <div class="flex flex-col gap-5">
+
+                    <div class="bg-dark-900 border border-dark-700 rounded-[10px] px-4 py-3">
+                        <div class="text-[10px] font-bold uppercase tracking-[1.2px] text-gray-600 mb-3">Text</div>
+                        <div class="flex items-center gap-3">
+                            <input type="text" x-model="value"
+                                   class="flex-1 min-w-0 bg-dark-500 border border-dark-600 text-gray-300 px-2.5 py-2 rounded-md text-sm font-mono tracking-[0.3px] focus:border-neon focus:outline-none"
+                                   spellcheck="false">
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <label class="text-[11px] text-gray-550">Length</label>
+                                <input type="number" x-model.number="length" min="0"
+                                       class="w-[48px] bg-dark-800 border border-dark-600 text-gray-300 px-1.5 py-1 rounded-[5px] text-[13px] focus:border-gray-550 focus:outline-none">
+                            </div>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <label class="text-[11px] text-gray-550">Pad</label>
+                                <input type="text" x-model="pad" maxlength="1"
+                                       class="w-[36px] bg-dark-800 border border-dark-600 text-gray-300 px-1.5 py-1 rounded-[5px] text-[13px] text-center focus:border-gray-550 focus:outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="bg-dark-500 border border-dark-700 rounded-xl px-6 py-8 flex justify-center items-center min-h-[150px]">
+                            <x-seglyph x-ref="preview" x-effect="syncPreview()"
+                                       mode="7seg" value="" theme="neon-green" height="96px" segment-gap="0.15" glow glow-blur="1"></x-seglyph>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── DESIGNER TAB ─── -->
+    <div x-show="tab === 'designer'" x-cloak>
+        <div x-data="designer()">
+            <div class="grid grid-cols-[260px_1fr] gap-7 max-[800px]:grid-cols-1 items-start">
+
+                <!-- side -->
+                <div class="flex flex-col gap-4">
+
+                    <div class="bg-dark-900 border border-dark-700 rounded-[10px] p-4">
+                        <div class="text-[10px] font-bold uppercase tracking-[1.2px] text-gray-600 mb-3">Glyph</div>
+                        <div class="flex items-center gap-2.5 mb-2.5 last:mb-0">
+                            <label class="text-xs text-gray-450 min-w-[36px] shrink-0">Mode</label>
+                            <select x-model="mode" class="flex-1 bg-dark-800 border border-dark-600 text-gray-300 px-2 py-[5px] rounded-[5px] text-[13px] cursor-pointer focus:border-gray-550 focus:outline-none">
+                                <option value="7seg">7-segment</option>
+                                <option value="9seg">9-segment</option>
+                                <option value="14seg">14-segment</option>
+                                <option value="16seg">16-segment</option>
+                            </select>
+                        </div>
+                        <hr class="border-none border-t border-dark-700 my-2.5">
+                        <div class="flex gap-2.5 items-start" x-html="refPanelHTML"></div>
+                    </div>
+
+                    <div class="bg-dark-900 border border-dark-700 rounded-[10px] p-4">
+                        <div class="text-[10px] font-bold uppercase tracking-[1.2px] text-gray-600 mb-3">Character Variants</div>
+                        <div class="flex items-center gap-2.5 mb-2.5 last:mb-0">
+                            <label class="text-xs text-gray-450 min-w-[36px] shrink-0">Char</label>
+                            <input type="text" x-ref="charInp" @input="onCharInput" :value="char" maxlength="1"
+                                   class="w-[48px] text-center text-base bg-dark-800 border border-dark-600 text-gray-300 px-1.5 py-1 rounded-[5px] focus:border-gray-550 focus:outline-none"
+                                   spellcheck="false">
+                            <span class="font-mono text-xs text-gray-400" x-html="activeSegsHTML"></span>
+                        </div>
+                        <hr class="border-none border-t border-dark-700 my-2.5">
+                        <div class="flex items-center gap-2.5 mb-2.5 last:mb-0">
+                            <button @click="addVariant" class="px-3 py-1 rounded-[5px] text-xs cursor-pointer transition-all duration-150 border border-neon text-neon bg-transparent hover:bg-neon-bg">+ Add Variant</button>
+                            <button @click="removeVariant" :disabled="variants.length <= 1"
+                                    class="px-3 py-1 rounded-[5px] text-xs cursor-pointer transition-all duration-150 border border-danger text-danger bg-transparent hover:bg-danger-bg disabled:opacity-35 disabled:cursor-not-allowed">Remove</button>
+                        </div>
+                        <div class="flex items-center gap-1.5 mt-2.5">
+                            <div class="flex gap-1 flex-1 flex-wrap">
+                                <template x-for="(v, i) in variants" :key="i">
+                                    <button @click="current = i"
+                                            class="px-3 py-0.5 rounded text-xs border cursor-pointer transition-all duration-150"
+                                            :class="i === current ? 'border-neon text-neon bg-neon-bg' : 'border-dark-600 bg-dark-900 text-gray-500 hover:border-gray-550 hover:text-gray-400'"
+                                            x-text="'V' + (i + 1)"></button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- main-area -->
+                <div class="flex flex-col gap-4">
+
+                    <div class="bg-dark-900 border border-dark-700 rounded-[10px] p-4">
+                        <div class="text-[10px] font-bold uppercase tracking-[1.2px] text-gray-600 mb-1">Click segments to toggle</div>
+                        <div class="bg-dark-500 border border-dark-700 rounded-xl px-6 py-8 flex justify-center items-center min-h-[200px]"
+                             x-ref="glyphContainer" @click="onGlyphClick" x-html="glyphSVG">
+                        </div>
+                    </div>
+
+                    <div class="bg-dark-900 border border-dark-700 rounded-[10px] p-4">
+                        <div class="text-[10px] font-bold uppercase tracking-[1.2px] text-gray-600 mb-3">Output (paste into <code class="text-gray-500">charmap.ts</code>)</div>
+                        <div class="bg-dark-500 border border-dark-700 rounded-lg px-3.5 py-3 flex items-center gap-3">
+                            <span class="text-[10px] font-bold uppercase tracking-[1px] text-gray-600 shrink-0">Entry</span>
+                            <pre class="flex-1 min-w-0 font-mono text-[13px] text-neon whitespace-pre-wrap break-all" x-text="outputText"></pre>
+                            <button @click="addToMap"
+                                     class="px-3 py-1 rounded-[5px] text-xs cursor-pointer transition-all duration-150 border border-dark-600 text-gray-400 bg-dark-800 hover:border-gray-550 hover:text-gray-300">+ Add to Map</button>
+                            <button @click="copyOutput"
+                                     class="px-3 py-1 rounded-[5px] text-xs cursor-pointer transition-all duration-150 border border-dark-600 text-gray-400 bg-dark-800 hover:border-gray-550 hover:text-gray-300">Copy</button>
+                        </div>
+                        <div class="flex items-center gap-2.5 mt-2 mb-0">
+                            <span class="font-mono text-xs text-gray-400">Variant <em class="not-italic text-gray-350" x-text="current + 1"></em>: <em class="not-italic text-gray-350" x-text="(variants[current] || []).length"></em> segments</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-dark-900 border border-dark-700 rounded-[10px] p-4">
+                        <div class="text-[10px] font-bold uppercase tracking-[1.2px] text-gray-600 mb-3">Character Map</div>
+                        <div class="bg-dark-500 border border-dark-700 rounded-lg px-3.5 py-3">
+                            <template x-if="mapChars.length === 0">
+                                <pre class="text-gray-400 text-xs" x-text="'No entries yet'"></pre>
+                            </template>
+                            <template x-if="mapChars.length > 0">
+                                <pre class="font-mono text-[13px] text-neon whitespace-pre-wrap break-all" x-text="mapText"></pre>
+                            </template>
+                        </div>
+                        <div class="flex items-center justify-between mt-2 mb-0">
+                            <div class="flex flex-wrap gap-1">
+                                <template x-for="ch in mapChars" :key="ch">
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs border border-dark-600 bg-dark-950 cursor-default"
+                                          :class="{ 'border-neon': ch === char }">
+                                        <span class="font-mono font-bold text-gray-350" x-text="ch"></span>
+                                        <span class="text-gray-550 text-[10px]" x-text="savedMap[mode][ch].length + 'V'"></span>
+                                        <button @click="removeFromMap(ch)"
+                                                class="bg-none border-none text-gray-550 cursor-pointer p-0 text-sm leading-none transition-colors duration-150 hover:text-danger"
+                                                x-text="'&#215;'"></button>
+                                    </span>
+                                </template>
+                            </div>
+                            <div class="flex items-center gap-2.5">
+                                <span class="text-[11px] text-gray-550" x-text="mapCountText"></span>
+                                <button @click="copyAll" :disabled="mapChars.length === 0"
+                                        class="px-3 py-1 rounded-[5px] text-xs cursor-pointer transition-all duration-150 border border-neon text-neon bg-transparent hover:bg-neon-bg disabled:opacity-35 disabled:cursor-not-allowed">Copy All</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center text-xs text-gray-650 pt-5 mt-7 border-t border-dark-700">
+        Copyright &copy; 2024&ndash;2026 <a href="https://samariafar.dev" class="text-gray-550 no-underline hover:text-gray-400">Sam Ariafar</a>
+    </div>
+
+</div>
+
+<div class="copy-toast">Copied!</div>
+
+<script>
+  window.op=window.op||function(){var n=[];return new Proxy(function(){arguments.length&&n.push([].slice.call(arguments))},{get:function(t,r){return"q"===r?n:function(){n.push([r].concat([].slice.call(arguments)))}} ,has:function(t,r){return"q"===r}}) }();
+  window.op('init', {
+    clientId: 'bbba98f2-963a-4c9d-bce9-660a6a8258bd',
+    trackScreenViews: true,
+    trackOutgoingLinks: true,
+    trackAttributes: true,
+  });
+</script>
+<script src="https://openpanel.dev/op1.js" defer async></script>
+</body>
+</html>

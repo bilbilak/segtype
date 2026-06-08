@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark-950: #0d0d0d;
+  --color-dark-900: #111;
+  --color-dark-800: #181818;
+  --color-dark-700: #1a1a1a;
+  --color-dark-600: #2a2a2a;
+  --color-dark-500: #0a0a0a;
+  --color-dark-400: #141414;
+  --color-gray-300: #ddd;
+  --color-gray-350: #bbb;
+  --color-gray-400: #888;
+  --color-gray-450: #777;
+  --color-gray-500: #666;
+  --color-gray-550: #555;
+  --color-gray-600: #444;
+  --color-gray-650: #333;
+  --color-neon: #76ff03;
+  --color-neon-bg: #76ff0311;
+  --color-neon-dim: #315324;
+  --color-danger: #ff1744;
+  --color-danger-bg: #ff174411;
+  --font-family-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+}
+
+/* ── Non-utility variables (Tailwind skips injecting these at :root) ── */
+
+:root {
+  --color-seg-off: #555;
+  --color-seg-on: #76ff03;
+  --color-range-bg: #2a2a2a;
+  --color-sel-opt-bg: #181818;
+  --color-toast-bg: #76ff03;
+  --color-toast-fg: #000;
+}
+
+/* ── Themed utility overrides ──
+   Tailwind's CDN injects its CSS after our stylesheet, so same-specificity rules
+   from Tailwind win over ours. We beat them with :root.light context (spec 0,2,0
+   vs Tailwind's standalone class at 0,1,0). Dark-mode classes have the same
+   values as Tailwind's defaults so cascade order doesn't matter.             */
+
+/* bg-dark-* */
+.bg-dark-950 { background-color: #0d0d0d; }
+:root.light .bg-dark-950 { background-color: #f5f4f0; }
+.bg-dark-900 { background-color: #111; }
+:root.light .bg-dark-900 { background-color: #ffffff; }
+.bg-dark-800 { background-color: #181818; }
+:root.light .bg-dark-800 { background-color: #eeede9; }
+.bg-dark-700 { background-color: #1a1a1a; }
+:root.light .bg-dark-700 { background-color: #e0dfdb; }
+.bg-dark-600 { background-color: #2a2a2a; }
+:root.light .bg-dark-600 { background-color: #d0cfcb; }
+.bg-dark-500 { background-color: #0a0a0a; }
+:root.light .bg-dark-500 { background-color: #fafaf8; }
+.bg-dark-400 { background-color: #141414; }
+:root.light .bg-dark-400 { background-color: #f0efeb; }
+
+/* text-gray-* */
+.text-gray-300 { color: #ddd; }
+:root.light .text-gray-300 { color: #333; }
+.text-gray-350 { color: #bbb; }
+:root.light .text-gray-350 { color: #1a1a1a; }
+.text-gray-400 { color: #888; }
+:root.light .text-gray-400 { color: #666; }
+.text-gray-450 { color: #777; }
+:root.light .text-gray-450 { color: #444; }
+.text-gray-500 { color: #666; }
+:root.light .text-gray-500 { color: #555; }
+.text-gray-550 { color: #555; }
+:root.light .text-gray-550 { color: #666; }
+.text-gray-600 { color: #444; }
+:root.light .text-gray-600 { color: #888; }
+.text-gray-650 { color: #333; }
+:root.light .text-gray-650 { color: #999; }
+
+/* text-neon, text-danger */
+.text-neon { color: #76ff03; }
+:root.light .text-neon { color: #2e7d32; }
+.text-danger { color: #ff1744; }
+:root.light .text-danger { color: #c62828; }
+
+/* border-dark-*, border-neon, border-danger */
+.border-dark-700 { border-color: #1a1a1a; }
+:root.light .border-dark-700 { border-color: #e0dfdb; }
+.border-dark-600 { border-color: #2a2a2a; }
+:root.light .border-dark-600 { border-color: #d0cfcb; }
+.border-neon { border-color: #76ff03; }
+:root.light .border-neon { border-color: #2e7d32; }
+.border-danger { border-color: #ff1744; }
+:root.light .border-danger { border-color: #c62828; }
+
+/* bg-neon-bg, bg-danger-bg */
+.bg-neon-bg { background-color: #76ff0311; }
+:root.light .bg-neon-bg { background-color: #2e7d3211; }
+.bg-danger-bg { background-color: #ff174411; }
+:root.light .bg-danger-bg { background-color: #c6282811; }
+
+/* accent */
+.accent-neon { accent-color: #76ff03; }
+:root.light .accent-neon { accent-color: #2e7d32; }
+
+/* hover states */
+.hover\:bg-dark-400:hover { background-color: #141414; }
+:root.light .hover\:bg-dark-400:hover { background-color: #f0efeb; }
+.hover\:bg-neon-bg:hover { background-color: #76ff0311; }
+:root.light .hover\:bg-neon-bg:hover { background-color: #2e7d3211; }
+.hover\:bg-danger-bg:hover { background-color: #ff174411; }
+:root.light .hover\:bg-danger-bg:hover { background-color: #c6282811; }
+.hover\:text-gray-300:hover { color: #ddd; }
+:root.light .hover\:text-gray-300:hover { color: #333; }
+.hover\:text-gray-400:hover { color: #888; }
+:root.light .hover\:text-gray-400:hover { color: #666; }
+.hover\:text-danger:hover { color: #ff1744; }
+:root.light .hover\:text-danger:hover { color: #c62828; }
+.hover\:border-gray-550:hover { border-color: #555; }
+:root.light .hover\:border-gray-550:hover { border-color: #666; }
+
+/* focus states */
+.focus\:border-gray-550:focus { border-color: #555; }
+:root.light .focus\:border-gray-550:focus { border-color: #666; }
+.focus\:border-neon:focus { border-color: #76ff03; }
+:root.light .focus\:border-neon:focus { border-color: #2e7d32; }
+
+/* ── direct var() overrides for non-Tailwind rules ── */
+
+:root.light {
+  --color-seg-off: #ddd;
+  --color-seg-on: #2e7d32;
+  --color-range-bg: #ccc;
+  --color-neon: #2e7d32;
+  --color-dark-950: #f5f4f0;
+  --color-toast-bg: #2e7d32;
+  --color-toast-fg: #fff;
+  --color-sel-opt-bg: #f0efeb;
+}
+
+[x-cloak] { display: none !important; }
+
+svg path.seg { fill: var(--color-seg-off); transition: fill .12s ease; cursor: pointer; }
+svg path.seg.on { fill: var(--color-seg-on); }
+svg path.seg:hover { filter: brightness(1.6); }
+:root.light svg path.seg:hover { filter: brightness(0.85); }
+
+input[type=range] {
+  -webkit-appearance: none; appearance: none; height: 4px;
+  background: var(--color-range-bg); border-radius: 2px;
+  border: none; padding: 0; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--color-neon); border: 2px solid var(--color-dark-950); cursor: pointer;
+}
+input[type=range]::-moz-range-thumb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--color-neon); border: 2px solid var(--color-dark-950); cursor: pointer;
+}
+input[type=range]:disabled { opacity: .35; }
+input[type=range]:disabled::-webkit-slider-thumb { background: #999; }
+input[type=range]:disabled::-moz-range-thumb { background: #999; }
+
+.copy-toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--color-toast-bg); color: var(--color-toast-fg);
+  padding: 8px 20px; border-radius: 6px; font-size: 13px; font-weight: 600;
+  opacity: 0; transition: opacity .25s; pointer-events: none;
+}
+.copy-toast.show { opacity: 1; }
+
+select option { background: var(--color-sel-opt-bg); }
