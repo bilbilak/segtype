@@ -1,0 +1,46 @@
+{
+  "name": "segtype",
+  "version": "1.0.0",
+  "license": "GPL-3.0-only",
+  "author": "Sam Ariafar <me@samariafar.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bilbilak/segtype.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bilbilak/segtype/issues"
+  },
+  "homepage": "https://bilbilak.github.io/segtype",
+  "description": "Web-based Multi-segment Displays",
+  "type": "module",
+  "main": "dist/segtype.js",
+  "module": "dist/segtype.mjs",
+  "unpkg": "dist/segtype.min.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/segtype.mjs",
+      "require": "./dist/segtype.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run build:ts && npm run build:bundle",
+    "build:ts": "tsc",
+    "build:bundle": "esbuild ./src/index.ts --bundle --platform=browser --outfile=dist/segtype.mjs --format=esm && esbuild ./src/index.ts --bundle --platform=node --outfile=dist/segtype.js --format=cjs && esbuild ./src/global.ts --bundle --platform=browser --outfile=dist/segtype.min.js --format=iife --global-name=SegType --minify",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.0",
+    "typescript": "^5.8.0"
+  },
+  "keywords": [
+    "seven-segment",
+    "display",
+    "web-component",
+    "custom-element",
+    "svg"
+  ]
+}
