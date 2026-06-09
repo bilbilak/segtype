@@ -110,7 +110,7 @@ document.addEventListener('alpine:init', () => {
             ${data.keys.map(k =>
               `<div class="flex items-center gap-2">
                 <div class="w-3 h-3 rounded-[3px] border border-dark-700 shrink-0" style="background:${colors[k]}"></div>
-                <span class="font-mono font-bold text-gray-300 text-[10px] min-w-[28px]">${k}</span>
+                <span class="font-mono font-bold text-gray-300 text-[10px]">${k}</span>
                 <span class="text-gray-550 text-[9px]">${data.desc[k] || ''}</span>
               </div>`
             ).join('')}
@@ -261,7 +261,7 @@ document.addEventListener('alpine:init', () => {
           ${data.keys.map(k =>
             `<div class="flex items-center gap-2">
               <div class="w-3 h-3 rounded-[3px] border border-dark-700 shrink-0" style="background:${colors[k]}"></div>
-              <span class="font-mono font-bold text-gray-300 text-[10px] min-w-[28px]">${k}</span>
+              <span class="font-mono font-bold text-gray-300 text-[10px]">${k}</span>
               <span class="text-gray-550 text-[9px]">${data.desc[k] || ''}</span>
             </div>`
           ).join('')}
